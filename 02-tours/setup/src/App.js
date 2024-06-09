@@ -10,6 +10,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [tours, setTours] = useState([]);
 
+  const deleteTour = (id) => {
+    const newTours = tours.filter(tour => tour.id !== id);
+    setTours(newTours);
+  }
+
   const fetchTours = async () => {
     try {
       const response = await fetch(url);
@@ -24,12 +29,16 @@ function App() {
 
   useEffect(() => {
     fetchTours();
-    }, [])
+  }, [])
     
+  const toursKit = {
+    tours,
+    deleteTour
+  }
 
   const Component = loading ? <Loading/>
                             : (
-                              <TourContext.Provider value={tours}>
+                              <TourContext.Provider value={toursKit}>
                                 <Tours/>
                               </TourContext.Provider>
                               )
