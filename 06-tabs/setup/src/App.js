@@ -1,14 +1,43 @@
 import React, { useState, useEffect } from 'react'
-import { FaAngleDoubleRight } from 'react-icons/fa'
-import fetchData from "./constants";
+import Loading from "./Loading";
+import Tabs from "./Tabs"
+
+const url = 'https://www.course-api.com/react-tabs-project';
+
+
 function App() {
-  const [tabs, setTabs] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const handleClick = (index) => {
+    setIndex(index);
+  }
+
+  const fetchData = async () => {
+    try {
+        const response = await fetch(url);
+        const tabs = await response.json();
+        setJobs(tabs);
+    } catch (error) {
+        throw new Error(error)
+    } finally {
+      setLoading(false);
+    }
+}
+
   useEffect(() => {
-    const requestedTabs = fetchData();
-    setTabs(requestedTabs);
+    fetchData();
   }, [])
-  console.log(tabs);
-  return <h2>tabs project setup</h2>
+
+  return (
+    <main>
+      <section className="section">
+        {loading ? <Loading/> : <Tabs index={index} jobs={jobs} props={jobs[index]} onClick={handleClick}/>}
+      </section>
+    </main>
+  )
+
 }
 
 export default App
