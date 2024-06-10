@@ -1,11 +1,8 @@
 import React from 'react';
-import items from "../../constants/"
-const Menu = ({category}) => {
-  let requestedItems = (category === "all") ? items : items.filter(item => item.category === category);
-  
+const Menu = ({items}) => {  
   return (
     <div className="section-center">
-      {requestedItems.map(item => {
+      {items.map(item => {
         const {id, title, price, img, desc} = item;
         return (
           <article key={id} className="menu-item">

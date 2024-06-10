@@ -1,13 +1,6 @@
 import items from "./index";
 
-const map = new Map();
-
-for (let itemIndex in items) {
-    const category = items[itemIndex].category;
-    if (!map.has(category)) {
-        map.set(category, itemIndex);
-    }
-}
+const uniqueCategories = new Set(items.map(item => item.category));
 // Get the desired category array
-const result = ["all", ...map.keys()]
+const result = ["all", ...uniqueCategories]
 export default result;
