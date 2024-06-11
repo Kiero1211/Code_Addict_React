@@ -1,10 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import List from './List'
 import Alert from './Alert'
 
+const getLocalStorage = () => {
+  let list = localStorage.getItem("list");
+  return list ? JSON.parse(list) : [];
+}
+
+
 function App() {
   const [name, setName] = useState("");
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(() => getLocalStorage());
   const [isEdit, setIsEdit] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({
@@ -16,9 +22,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name) {
-      console.log("Invalid name");
-
-      showAlert(true, "danger", "Plese enter a something")
+      showAlert(true, "danger", "Plese enter something")
     } else if (name && isEdit) {
       let found = false;
       let foundIndex = -1;
@@ -76,7 +80,11 @@ function App() {
     showAlert(true, "danger", "Empty list")
     setList([]);
   }
-  
+
+  useEffect(() => {
+    localStorage.setItem("list", JSON.stringify(list))
+  }, [list])
+
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>

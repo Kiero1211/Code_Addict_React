@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 const Alert = ({show, type, msg, removeAlert, list}) => {
   useEffect(() => {
-    const timerID = setInterval(() => {removeAlert()}, 3000);
+    const timerID = setInterval(() => removeAlert(), 3000);
     return () => {
       clearInterval(timerID);
     }
