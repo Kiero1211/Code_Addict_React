@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import List from './List'
 import Alert from './Alert'
 
@@ -16,12 +16,9 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name) {
-      // Error alert
-      setAlert({
-        show: true,
-        type: "danger",
-        msg: "Failed to add grocery item to the list. Plese make sure you have filled in the input"
-      })
+      console.log("Invalid name");
+
+      showAlert(true, "danger", "Plese enter a something")
     } else if (name && isEdit) {
       let found = false;
       let foundIndex = -1;
@@ -33,11 +30,7 @@ function App() {
       }
 
       if (!found) {
-        setAlert({
-          show: true,
-          type: "danger",
-          msg: "Cannot find item. Plese re-check if its still in the grocery list"
-        })
+        showAlert(true, "danger", "Cannot find item")
       }
       // Edit list state
       setList(prev => {
@@ -46,26 +39,26 @@ function App() {
       })
       setName("");
       setIsEdit(false);
-      setAlert({
-        show: true,
-        type: "success",
-        msg: "Edited successfully"
-      }) 
+      showAlert(true, "success", "Edited successfully");
     } else {
+      showAlert(true, "success", `Successfully addedd ${name} to the list`)
       const newJob = {
         id: new Date().getTime().toString(),
         title: name
       }
       setList(prev => [...prev, newJob]);
       setName("");
-      setAlert({
-        show: true,
-        type: "success",
-        msg: `Successfully addedd ${name} to the list`
-      })
     }
 
   }
+
+  const showAlert = (
+        show = false,
+        type = "",
+        msg = ""
+      ) => {
+        setAlert({show, type, msg});
+      }
 
   const handleEdit = (requestedItem) => {
     setEditID(requestedItem.id);
@@ -76,17 +69,18 @@ function App() {
   const handleDelete = (requestedItem) => {
     const newList = list.filter(item => item.id !== requestedItem.id);
     setList(newList);
-    setAlert({
-      show: true,
-      type: "danger",
-      msg: `Deleted ${requestedItem.title} from the list`
-    })
+    showAlert(true, "danger", `Deleted ${requestedItem.title} from the list`)
   }
 
+  const handleClearList = () => {
+    showAlert(true, "danger", "Empty list")
+    setList([]);
+  }
+  
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
-        {alert.show && <Alert {...alert}/>}
+        {alert.show && <Alert {...alert} removeAlert={showAlert} list={list}/>}
         <h3>Grocery Bud</h3>
         <div className="form-control">
           <input 
@@ -109,7 +103,7 @@ function App() {
             handleEdit={handleEdit}
             handleDelete={handleDelete}
           />
-          <button className="clear-btn" onClick={() => setList([])}>Clear items</button>
+          <button className="clear-btn" onClick={handleClearList}>Clear items</button>
         </section>
       }
 
