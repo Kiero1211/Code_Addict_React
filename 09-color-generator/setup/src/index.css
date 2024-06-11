@@ -159,6 +159,11 @@ input {
   border-top-left-radius: var(--radius);
   border-bottom-left-radius: var(--radius);
 }
+input[type="color"] {
+  height: 40px;
+  background-color: var(--clr-white);
+  border-color: transparent;
+}
 .btn {
   background: var(--clr-primary-5);
   padding: 0.5rem 1rem;
