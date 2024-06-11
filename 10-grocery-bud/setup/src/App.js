@@ -17,6 +17,11 @@ function App() {
     e.preventDefault();
     if (!name) {
       // Error alert
+      setAlert({
+        show: true,
+        type: "danger",
+        msg: "Failed to add grocery item to the list. Plese make sure you have filled in the input"
+      })
     } else if (name && isEdit) {
       let found = false;
       let foundIndex = -1;
@@ -28,7 +33,11 @@ function App() {
       }
 
       if (!found) {
-        // Alert cannot find
+        setAlert({
+          show: true,
+          type: "danger",
+          msg: "Cannot find item. Plese re-check if its still in the grocery list"
+        })
       }
       // Edit list state
       setList(prev => {
@@ -36,7 +45,12 @@ function App() {
         return prev;
       })
       setName("");
-      setIsEdit(false); 
+      setIsEdit(false);
+      setAlert({
+        show: true,
+        type: "success",
+        msg: "Edited successfully"
+      }) 
     } else {
       const newJob = {
         id: new Date().getTime().toString(),
@@ -44,25 +58,35 @@ function App() {
       }
       setList(prev => [...prev, newJob]);
       setName("");
+      setAlert({
+        show: true,
+        type: "success",
+        msg: `Successfully addedd ${name} to the list`
+      })
     }
 
   }
 
-  const handleEdit = (item) => {
-    setEditID(item.id);
+  const handleEdit = (requestedItem) => {
+    setEditID(requestedItem.id);
     setIsEdit(true);
-    setName(item.title);
+    setName(requestedItem.title);
   }
 
-  const handleDelete = (requestedID) => {
-    const newList = list.filter(item => item.id !== requestedID);
+  const handleDelete = (requestedItem) => {
+    const newList = list.filter(item => item.id !== requestedItem.id);
     setList(newList);
+    setAlert({
+      show: true,
+      type: "danger",
+      msg: `Deleted ${requestedItem.title} from the list`
+    })
   }
 
   return (
     <section className="section-center">
       <form className="grocery-form" onSubmit={handleSubmit}>
-        {alert.show && <Alert />}
+        {alert.show && <Alert {...alert}/>}
         <h3>Grocery Bud</h3>
         <div className="form-control">
           <input 
