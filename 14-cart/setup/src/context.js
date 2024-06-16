@@ -1,18 +1,18 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
-import cartItems from './data'
-import reducer from './reducer'
-// ATTENTION!!!!!!!!!!
-// I SWITCHED TO PERMANENT DOMAIN
-const url = 'https://course-api.com/react-useReducer-cart-project'
+import {reducer, initalState} from './reducer'
+
+
 const AppContext = React.createContext()
 
+
+
 const AppProvider = ({ children }) => {
-  const [cart, setCart] = useState(cartItems)
+  const [state, dispatch] = useReducer(reducer, initalState)
 
   return (
     <AppContext.Provider
       value={{
-        cart,
+        ...state,
       }}
     >
       {children}
