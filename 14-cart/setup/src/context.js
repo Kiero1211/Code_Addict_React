@@ -9,16 +9,26 @@ const AppContext = React.createContext()
 
 
 const initalState = {
-  loading: false,
-  cart: await fetchData(),
+  loading: true,
+  cart: [],
   quantity: 0,
   totalPrice: 0
 }
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initalState);
-  const {getTotals}  = actions;
+  const {getTotals, loading, displayItems}  = actions;
   
+  const handleFetchData = async () => {
+    dispatch(loading());
+    const data = await fetchData();
+    dispatch(displayItems(data));
+  }
+
+  useEffect(() => {
+    handleFetchData();
+  }, [])
+
   useEffect(() => {
     dispatch(getTotals());
   }, [state.cart])

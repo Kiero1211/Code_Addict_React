@@ -5,13 +5,26 @@ const {
   REMOVE_ITEM, 
   INCREASE_ITEM, 
   DECREASE_ITEM,
-  GET_TOTALS
+  GET_TOTALS,
+  LOADING,
+  DISPLAY_ITEMS
 } = constants;
 
 const reducer = (state, action) => {
   let newCart;
   const {type, payload} = action;
   switch (type) {
+    case LOADING:
+      return {
+        ...state,
+        loading: true
+      }
+    case DISPLAY_ITEMS: 
+      return {
+        ...state,
+        loading: false,
+        cart: payload
+      }
     case CLEAR_CART:
       return {
         ...state,

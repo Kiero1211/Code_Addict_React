@@ -5,8 +5,23 @@ const {
     REMOVE_ITEM, 
     INCREASE_ITEM, 
     DECREASE_ITEM,
-    GET_TOTALS
+    GET_TOTALS,
+    LOADING,
+    DISPLAY_ITEMS
 } = constants;
+
+const loading = () => {
+    return {
+        type: LOADING
+    }
+}
+
+const displayItems = payload => {
+    return {
+        type: DISPLAY_ITEMS,
+        payload
+    }
+}
 
 const clearCart = () => {
     return {
@@ -46,7 +61,9 @@ const actions = {
     removeItem,
     increaseItem,
     decreaseItem,
-    getTotals
+    getTotals,
+    loading,
+    displayItems
 }
 
 export default actions;
