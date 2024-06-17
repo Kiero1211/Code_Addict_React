@@ -1,18 +1,35 @@
 import React, { useState, useContext, useReducer, useEffect } from 'react'
-import {reducer, initalState} from './reducer'
-
+import reducer from './reducer'
+import constants from './constants'
+import actions from './actions'
+import {fetchData} from "./data";
 
 const AppContext = React.createContext()
 
 
 
-const AppProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initalState)
+const initalState = {
+  loading: false,
+  cart: await fetchData(),
+  quantity: 0,
+  totalPrice: 0
+}
 
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initalState);
+  const {getTotals}  = actions;
+  
+  useEffect(() => {
+    dispatch(getTotals());
+  }, [state.cart])
+  
   return (
     <AppContext.Provider
       value={{
         ...state,
+        dispatch,
+        constants,
+        actions
       }}
     >
       {children}
