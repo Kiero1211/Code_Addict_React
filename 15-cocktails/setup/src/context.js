@@ -49,7 +49,7 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     handleFetch();
-  }, [searchTerm])
+  }, [searchTerm, handleFetch])
   return <AppContext.Provider value={{
     loading,
     cocktailList,
